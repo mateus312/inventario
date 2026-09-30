@@ -1,0 +1,162 @@
+#Mateus botelho /  7 /   29/09/2026
+
+SALAS = ('LAB1','LAB2','LAB3')
+ESTADOS = ('operacional','avariado','em reparação')
+
+tipos = ['computador','monitor','impressora','router','switch','projetor']
+reparados = []
+historico = []
+
+inventario = {
+    'PC1': {
+
+    'nome': 'Desktop Elite',
+    'tipo': 'computador',
+    'sala': 'LAB2',
+    'quantidade': 10,
+    'estado': 'operacional'
+    },
+    'PC2': {
+    
+        'nome': 'Desktop Dell',
+        'tipo': 'computador',
+        'sala': 'LAB3',
+        'quantidade': 8,
+        'estado': 'avariado'
+    },
+    'PC3': {
+    
+        'nome': 'Desktop Lenovo',
+        'tipo': 'computador',
+        'sala': 'LAB1',
+        'quantidade': 12,
+        'estado': 'operacional'
+        },
+    'PC4': {
+    
+        'nome': 'Desktop Asus',
+        'tipo': 'computador',
+        'sala': 'LAB2',
+        'quantidade': 6,
+        'estado': 'em reparação'
+        },
+    'MN1': {
+
+        'nome': 'Monitor',
+        'tipo': 'monitor',
+        'sala': 'LAB1',
+        'quantidade': 15,
+        'estado': 'operacional'
+    },
+    'IMP1' : {
+
+        'nome': 'Impressora Brother',
+        'tipo': 'impressora',
+        'sala': 'LAB3',
+        'quantidade': 2,
+        'estado': 'avariado'    
+    }
+
+}
+
+menu = '========================================\n'
+menu += '       GESTOR DE INVENTÁRIO\n'
+menu += '========================================\n'
+menu += '\n1 - Listar equipamentos'
+menu += '\n2 - Adicionar equipamento'
+menu += '\n3 - Pesquisar equipamento'
+menu += '\n4 - Alterar estado de um equipamento'
+menu += '\n5 - Remover equipamento'
+menu += '\n6 - Lista de reparação'
+menu += '\n7 - Estatísticas'
+menu += '\n8 - Histórico de operações'
+menu += '\n0 - Sair\n'
+menu += '\n========================================'
+
+ativo = True
+
+
+while ativo:
+    print(menu)
+
+    opcao = input("Escolha uma opção: ")
+    opcao = int(opcao)
+
+    if opcao == 0:
+            print("A sair do programa...")
+            print("Obrigado por utilizar o Gestor de Inventário")
+            ativo = False
+
+    elif opcao == 1:
+        print("ENTREI NA OPÇÃO 1")
+        print(
+            f"{'CÓDIGO':<8} | {'NOME':<25} | {'SALA':<6} | "
+            f"{'QUANTIDADE':<10} | {'ESTADO':<15}"
+        )
+        print("-" * 75)
+
+        for codigo in sorted(inventario):
+            dados = inventario[codigo]
+
+            print(
+                f"{codigo:<8} | {dados['nome'].title():<25} | "
+                f"{dados['sala']:<6} | "
+                f"{dados['quantidade']:<10} | "
+                f"{dados['estado']:<15}"
+            )
+
+        print(f"\nTotal de registos: {len(inventario)}")
+        input("\nPrima ENTER para voltar ao menu...")
+
+
+    elif opcao == 2:
+        codigo = input("Indique o código do equipamento: ").strip().upper()
+
+        if codigo == "" or codigo in inventario:
+            print("Código vazio ou já existente no inventário.")
+            input("\nPrima ENTER para voltar ao menu...")
+            continue
+
+        nome = input("Indique o nome do equipamento: ").strip()
+
+        while nome == "":
+            print("O nome não pode ficar vazio.")
+            nome = input("Indique o nome do equipamento: ").strip()
+
+            print("Tipos disponíveis:", tipos)
+            tipo = input("Indique o tipo: ").strip().lower()
+
+        while tipo not in tipos:
+            print("Tipo inválido.")
+            tipo = input("Indique o tipo: ").strip().lower()
+
+   
+        sala = input("Indique a sala (LAB1, LAB2 ou LAB3): ")
+        sala = sala.strip().upper()
+
+        while sala not in SALAS:
+            print("Sala inválida.")
+            sala = input("Indique a sala (LAB1, LAB2 ou LAB3): ")
+            sala = sala.strip().upper()
+
+   
+        quantidade = int(input("Indique a quantidade: "))
+
+        while quantidade <= 0:
+            print("A quantidade deve ser maior que zero.")
+            quantidade = int(input("Indique a quantidade: "))
+
+    inventario[codigo] = {
+        "nome": nome,
+        "tipo": tipo,
+        "sala": sala,
+        "quantidade": quantidade,
+        "estado": "operacional"
+    }
+
+    historico.append(f"Equipamento {codigo} adicionado ao inventário.")
+
+    print(f"Equipamento {codigo} adicionado com sucesso!")
+    input("\nPrima ENTER para voltar ao menu...")
+
+
