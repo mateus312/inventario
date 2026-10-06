@@ -1,23 +1,26 @@
 #Mateus botelho /  7 /   29/09/2026
 
-SALAS = ('LAB1','LAB2','LAB3')
-ESTADOS = ('operacional','avariado','em reparação')
-
-tipos = ['computador','monitor','impressora','router','switch','projetor']
+SALAS = ('LAB1', 'LAB2', 'LAB3')
+ESTADOS = ('operacional', 'avariado', 'em reparação')
+tipos = [
+    'computador',
+    'monitor',
+    'impressora',
+    'router',
+    'switch',
+    'projetor'
+]
 reparados = []
 historico = []
-
 inventario = {
     'PC1': {
-
-    'nome': 'Desktop Elite',
-    'tipo': 'computador',
-    'sala': 'LAB2',
-    'quantidade': 10,
-    'estado': 'operacional'
+        'nome': 'Desktop Elite',
+        'tipo': 'computador',
+        'sala': 'LAB2',
+        'quantidade': 10,
+        'estado': 'operacional'
     },
     'PC2': {
-    
         'nome': 'Desktop Dell',
         'tipo': 'computador',
         'sala': 'LAB3',
@@ -25,39 +28,40 @@ inventario = {
         'estado': 'avariado'
     },
     'PC3': {
-    
         'nome': 'Desktop Lenovo',
         'tipo': 'computador',
         'sala': 'LAB1',
         'quantidade': 12,
         'estado': 'operacional'
-        },
+    },
     'PC4': {
-    
         'nome': 'Desktop Asus',
         'tipo': 'computador',
         'sala': 'LAB2',
         'quantidade': 6,
         'estado': 'em reparação'
-        },
+    },
     'MN1': {
-
         'nome': 'Monitor',
         'tipo': 'monitor',
         'sala': 'LAB1',
         'quantidade': 15,
         'estado': 'operacional'
     },
-    'IMP1' : {
-
+    'IMP1': {
         'nome': 'Impressora Brother',
         'tipo': 'impressora',
         'sala': 'LAB3',
         'quantidade': 2,
-        'estado': 'avariado'    
+        'estado': 'avariado'
     }
-
 }
+lista_reparacao = []
+
+for codigo in inventario:
+    if inventario[codigo]['estado'] == 'avariado':
+        lista_reparacao.append(codigo)
+
 
 menu = '========================================\n'
 menu += '       GESTOR DE INVENTÁRIO\n'
@@ -73,90 +77,336 @@ menu += '\n8 - Histórico de operações'
 menu += '\n0 - Sair\n'
 menu += '\n========================================'
 
+
+
 ativo = True
 
-
 while ativo:
+    print('\n' * 30)
     print(menu)
 
-    opcao = input("Escolha uma opção: ")
+    opcao = input('Escolha uma opção: ')
     opcao = int(opcao)
 
+
+
+
+
+
     if opcao == 0:
-            print("A sair do programa...")
-            print("Obrigado por utilizar o Gestor de Inventário")
+        confirmacao = input('Tem a certeza que quer sair? (s/n): ').strip().lower()
+
+        if confirmacao == 's':
+            print('A sair do programa...')
+            print('Obrigado por utilizar o Gestor de Inventário')
             ativo = False
 
+
+
+
+
+
     elif opcao == 1:
-        print("ENTREI NA OPÇÃO 1")
-        print(
-            f"{'CÓDIGO':<8} | {'NOME':<25} | {'SALA':<6} | "
-            f"{'QUANTIDADE':<10} | {'ESTADO':<15}"
-        )
-        print("-" * 75)
-
-        for codigo in sorted(inventario):
-            dados = inventario[codigo]
-
+        if len(inventario) == 0:
+            print('O inventário está vazio.')
+        else:
             print(
-                f"{codigo:<8} | {dados['nome'].title():<25} | "
-                f"{dados['sala']:<6} | "
-                f"{dados['quantidade']:<10} | "
-                f"{dados['estado']:<15}"
+                f"{'CÓDIGO':<8} | {'NOME':<25} | {'SALA':<6} | "
+                f"{'QUANTIDADE':<10} | {'ESTADO':<15}"
             )
 
-        print(f"\nTotal de registos: {len(inventario)}")
-        input("\nPrima ENTER para voltar ao menu...")
+            print('-' * 75)
+
+            for codigo in sorted(inventario):
+                dados = inventario[codigo]
+
+                print(
+                    f"{codigo:<8} | "
+                    f"{dados['nome'].title():<25} | "
+                    f"{dados['sala']:<6} | "
+                    f"{dados['quantidade']:<10} | "
+                    f"{dados['estado']:<15}"
+                )
+
+            print(f'\nTotal de registos: {len(inventario)}')
+
+        input('\nPrima ENTER para voltar ao menu...')
+
+
 
 
     elif opcao == 2:
-        codigo = input("Indique o código do equipamento: ").strip().upper()
+        codigo = input('Indique o código do equipamento: ').strip().upper()
 
-        if codigo == "" or codigo in inventario:
-            print("Código vazio ou já existente no inventário.")
-            input("\nPrima ENTER para voltar ao menu...")
+        if codigo == '' or codigo in inventario:
+            print('Código vazio ou já existente no inventário.')
+            input('\nPrima ENTER para voltar ao menu...')
             continue
 
-        nome = input("Indique o nome do equipamento: ").strip()
+        nome = input('Indique o nome do equipamento: ').strip()
 
-        while nome == "":
-            print("O nome não pode ficar vazio.")
-            nome = input("Indique o nome do equipamento: ").strip()
+        while nome == '':
+            print('O nome não pode ficar vazio.')
+            nome = input('Indique o nome do equipamento: ').strip()
 
-            print("Tipos disponíveis:", tipos)
-            tipo = input("Indique o tipo: ").strip().lower()
+
+        print('Tipos disponíveis:', tipos)
+        tipo = input('Indique o tipo: ').strip().lower()
 
         while tipo not in tipos:
-            print("Tipo inválido.")
-            tipo = input("Indique o tipo: ").strip().lower()
+            print('Tipo inválido.')
 
-   
-        sala = input("Indique a sala (LAB1, LAB2 ou LAB3): ")
-        sala = sala.strip().upper()
+            tipo = input('Indique o tipo: ').strip().lower()
+
+        sala = input('Indique a sala (LAB1, LAB2 ou LAB3): ').strip().upper()
 
         while sala not in SALAS:
-            print("Sala inválida.")
-            sala = input("Indique a sala (LAB1, LAB2 ou LAB3): ")
-            sala = sala.strip().upper()
+            print('Sala inválida.')
 
-   
-        quantidade = int(input("Indique a quantidade: "))
+            sala = input('Indique a sala (LAB1, LAB2 ou LAB3): ').strip().upper()
+
+        quantidade = int(input('Indique a quantidade: '))
 
         while quantidade <= 0:
-            print("A quantidade deve ser maior que zero.")
-            quantidade = int(input("Indique a quantidade: "))
+            print('A quantidade deve ser maior que zero.')
 
-    inventario[codigo] = {
-        "nome": nome,
-        "tipo": tipo,
-        "sala": sala,
-        "quantidade": quantidade,
-        "estado": "operacional"
-    }
+            quantidade = int(input('Indique a quantidade: '))
 
-    historico.append(f"Equipamento {codigo} adicionado ao inventário.")
+        inventario[codigo] = {
+            'nome': nome,
+            'tipo': tipo,
+            'sala': sala,
+            'quantidade': quantidade,
+            'estado': 'operacional'
+        }
 
-    print(f"Equipamento {codigo} adicionado com sucesso!")
-    input("\nPrima ENTER para voltar ao menu...")
+        historico.append(f'Equipamento {codigo} adicionado ao inventário.')
+
+        print(f'Equipamento {codigo} adicionado com sucesso!')
+
+        input('\nPrima ENTER para voltar ao menu...')
+
+    elif opcao == 3:
+        codigo = input('Indique o codigo do equipamento: ').strip().upper()
+
+        equipamento = inventario.get(codigo)
+
+
+        if equipamento is not None:
+            print('\n--- Ficha do equipamento ---')
+
+            for campo in equipamento:
+                print(f'{campo}: {equipamento[campo]}')
+        else:
+            print('Equipamento não encontrado')        
+        input('\nPrima ENTER para voltar ao menu...')
+
+
+
+
+    elif opcao == 4:
+
+        codigo = input(f"Indique o codigo do equipamento que deseja alterar: ").strip().upper()
+
+        equipamento = inventario.get(codigo)
+
+
+        if equipamento is None:
+            print(f"Equipamento não encontrado")
+
+        else:
+            estado_atual = equipamento['estado']
+
+            print(f"Estado atual: {estado_atual}")
+            print(f"Estados disponiveis: ", ESTADOS)
+
+            estado = input('Indique o novo estado do equipamento: ').strip().lower()
+
+            while estado not in ESTADOS:
+                print(f"Estado incorreto")
+                estado = input('Indique o novo estado do equipamento: ').strip().lower()
+
+            if estado == estado_atual:
+                print(f"O equipamento já está neste estado")
+            else:
+                equipamento['estado'] = estado
+
+                if estado == 'avariado':
+
+                    if codigo not in lista_reparacao:
+                        lista_reparacao.append(codigo)
+
+                else:
+
+                    while codigo in lista_reparacao:
+                        lista_reparacao.remove(codigo)
+
+                historico.append(
+                    f'Estado de {codigo}'
+                    f' era {estado_atual} e passou a ser {estado}'
+                )
+                print(f"Estado alterado com sucesso")
+
+                
+        input('\nPrima ENTER para voltar ao menu...')
+
+
+
+
+    elif opcao == 5:
+        codigo = input("Indique o codigo do equipamento para removelo: ").strip().upper()
+
+
+        equipamento = inventario.get(codigo)
+
+
+        if equipamento is None:
+            print('Equipamento nao encontrado')
+
+        else:
+
+            print(f"Equipamento: {equipamento['nome']} ")
+
+
+            confirmar = input(f"Tem a certeza que deseja eliminar {equipamento['nome']} (s/n)? ").strip().lower()
+
+
+            if confirmar == 's':
+                del inventario[codigo]
+
+
+                while codigo in lista_reparacao:
+                    lista_reparacao.remove(codigo)
+
+
+                historico.append(
+                    f"Equipamento {codigo} foi removido do inventário"
+                )
+                print(f"Equipamento removido com sucesso")
+            else:
+                print(f"Remoção foi cancelada")
+
+        input('\nPrima ENTER para voltar ao menu...')
+
+
+
+
+    elif opcao == 6:
+
+        if len(lista_reparacao) == 0:
+            print(f"A lista de reparações está vazia")
+
+        else:
+            print(f"Equipamentos a aguardar a reparação")
+
+            numero = 1
+
+            for codigo in lista_reparacao:
+                print(f"{numero}. {codigo} - {inventario[codigo]['nome']}")
+
+                numero += 1
+
+            confirmar = input('Procecessar as reparações (s/n)?')
+            if confirmar == 's':
+                while len(lista_reparacao) > 0:
+
+                    codigo = lista_reparacao.pop(0)
+
+                    inventario[codigo]['estado'] = 'operacional'
+                    reparados.append(codigo)
+
+                    historico.append(
+                        f"O equipamento {codigo} foi reparado"
+                    )
+
+                print(f"Todas as reparações foram concluídas com sucesso")
+                print(f"Os equipamentos reparados foram {reparados}")
+
+            else:
+                print(f"Reparações canceladas")
+
+        input('\nPrima ENTER para voltar ao menu...')
+
+
+
+
+    elif opcao == 7:
+
+        if len(inventario) == 0:
+            print('O inventario está vazio.')
+
+        else:
+            quantidade = [
+                inventario[codigo]['quantidade']
+                for codigo in inventario
+            ]
+
+            print('\n--- Estatísticas ---')
+            print(f'Total de registos: {len(inventario)}')
+            print(f'Total de unidades: {sum(quantidade)}')
+            print(f'Maior quantidade: {max(quantidade)}')
+            print(f'Menor quantidade: {min(quantidade)}')
+
+            existentes = set()
+
+            for codigo in inventario:
+                existentes.add(inventario[codigo]['tipo'])
+
+            print(f'Tipos: {sorted(existentes)}')
+
+            estados = {}
+
+            for codigo in inventario:
+                estado = inventario[codigo]['estado']
+
+                if estado not in estados:
+                    estados[estado] = 0
+
+                estados[estado] += 1
+
+            print('\nEquipamentos por estado:')
+
+            for estado in estados:
+                print(
+                    f'{estado}: {estados[estado]}'
+                )
+
+            print('\nUnidades por sala:')
+
+            for sala in SALAS:
+                total = 0
+
+                for codigo in inventario:
+                    if inventario[codigo]['sala'] == sala:
+                        total += inventario[codigo]['quantidade']
+
+                print(f'{sala}: {total}')
+        input('\nPrima ENTER para voltar ao menu...')
+
+
+
+    elif opcao == 8:
+        if len(historico) == 0:
+            print('Não existem operações no histórico.')
+
+        else:
+            ultimas_operacoes = historico[-5:]
+
+            print('\n--- Histórico de operações ---')
+
+            for operacao in ultimas_operacoes:
+                print(operacao)
+
+            print(
+                f'\nTotal de operações: {len(historico)}'
+            )
+        
+        input('\nPrima ENTER para voltar ao menu...')
+
+
+
+    else:
+        print('Opção inválida.')
+        input('\nPrima ENTER para voltar ao menu...')
 
 
